@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>WasteWise — Stop Overproducing. Start Recovering.</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,700;0,900;1,300;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  /* ===== RESET & BASE ===== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; font-size: 16px; }
+
+  :root {
+    --bg:       #0d1108;
+    --bg2:      #111a0b;
+    --bg3:      #16210e;
+    --surface:  #1c2b12;
+    --border:   #2a3d1a;
+    --green:    #4c7c2e;
+    --green-l:  #5e9636;
+    --lime:     #a8d548;
+    --amber:    #e8a030;
+    --amber-l:  #f5c060;
+    --text:     #e8eae0;
+    --muted:    #8a9070;
+    --white:    #f4f5ef;
+
+    --ff-head: 'Fraunces', Georgia, serif;
+    --ff-body: 'DM Sans', sans-serif;
+    --radius:   10px;
+    --transition: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--ff-body);
+    line-height: 1.65;
+    overflow-x: hidden;
+  }
+
+  /* ===== NOISE OVERLAY ===== */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 999; opacity: 0.4;
+  }
+
+  /* ===== LAYOUT ===== */
+  .container { max-width: 1180px; margin: 0 auto; padding: 0 32px; }
+  section { position: relative; }
+
+  /* ===== TYPOGRAPHY ===== */
+  h1, h2, h3, h4 { font-family: var(--ff-head); font-weight: 700; line-height: 1.15; }
+  h1 { font-size: clamp(2.8rem, 6vw, 5.2rem); }
+  h2 { font-size: clamp(2rem, 4vw, 3rem); }
+  h3 { font-size: 1.4rem; font-weight: 600; font-family: var(--ff-body); }
+  p  { color: var(--muted); font-size: 1.05rem; }
+
+  .tag {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--lime);
+    background: rgba(168, 213, 72, 0.1);
+    border: 1px solid rgba(168, 213, 72, 0.25);
+    padding: 6px 14px;
+    border-radius: 100px;
+    margin-bottom: 20px;
+  }
+
+  /* ===== BUTTONS ===== */
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--ff-body); font-size: 0.95rem; font-weight: 600;
+    padding: 14px 28px; border-radius: var(--radius);
+    border: none; cursor: pointer; text-decoration: none;
+    transition: var(--transition); white-space: nowrap;
+  }
+  .btn-primary {
+    background: var(--lime); color: #0d1108;
+  }
+  .btn-primary:hover { background: #bfe05a; transform: translateY(-1px); box-shadow: 0 8px 30px rgba(168,213,72,0.3); }
+  .btn-secondary {
+    background: transparent; color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-secondary:hover { border-color: var(--lime); color: var(--lime); transform: translateY(-1px); }
+  .btn-amber { background: var(--amber); color: #0d1108; }
+  .btn-amber:hover { background: var(--amber-l); transform: translateY(-1px); box-shadow: 0 8px 30px rgba(232,160,48,0.3); }
+
+  /* ===== NAV ===== */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 20px 0;
+    background: rgba(13, 17, 8, 0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(42, 61, 26, 0.4);
+    transition: var(--transition);
+  }
+  .nav-inner {
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .logo {
+    font-family: var(--ff-head); font-size: 1.5rem; font-weight: 900;
+    color: var(--white); text-decoration: none; letter-spacing: -0.02em;
+  }
+  .logo span { color: var(--lime); }
+  .nav-links {
+    display: flex; align-items: center; gap: 32px; list-style: none;
+  }
+  .nav-links a {
+    color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  /* ===== HERO ===== */
+  #hero {
+    padding: 160px 0 120px;
+    background: radial-gradient(ellipse 70% 60% at 50% 0%, rgba(76, 124, 46, 0.18) 0%, transparent 70%);
+    overflow: hidden;
+  }
+  .hero-inner {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+  }
+  .hero-left { position: relative; }
+  .hero-headline { color: var(--white); margin-bottom: 24px; }
+  .hero-headline em { font-style: italic; color: var(--lime); }
+  .hero-sub {
+    font-size: 1.15rem; line-height: 1.7; margin-bottom: 36px; color: var(--muted);
+    max-width: 520px;
+  }
+  .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 52px; }
+  .hero-trust {
+    display: flex; align-items: center; gap: 20px;
+    padding-top: 28px; border-top: 1px solid var(--border);
+  }
+  .trust-item { font-size: 0.82rem; color: var(--muted); }
+  .trust-dot { width: 4px; height: 4px; background: var(--border); border-radius: 50%; }
+
+  /* Dashboard Mockup */
+  .hero-right { position: relative; }
+  .dashboard {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(168,213,72,0.06);
+    position: relative; overflow: hidden;
+  }
+  .dashboard::before {
+    content: '';
+    position: absolute; top: -1px; left: 20px; right: 20px; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--lime), transparent);
+  }
+  .dash-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .dash-title { font-size: 0.8rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  .dash-date { font-size: 0.75rem; color: var(--green-l); background: rgba(94,150,54,0.12); padding: 4px 10px; border-radius: 6px; }
+  .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  .dash-card {
+    background: rgba(22,33,14,0.8); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px;
+  }
+  .dash-metric { font-size: 1.6rem; font-family: var(--ff-head); font-weight: 700; color: var(--white); }
+  .dash-metric-label { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+  .dash-metric-change { font-size: 0.72rem; color: var(--lime); margin-top: 4px; }
+  .dash-metric-warn { font-size: 0.72rem; color: var(--amber); margin-top: 4px; }
+  .prep-list { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .prep-list-header {
+    background: rgba(22,33,14,0.6); padding: 10px 14px;
+    font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em;
+    display: grid; grid-template-columns: 1fr auto auto;
+  }
+  .prep-row {
+    display: grid; grid-template-columns: 1fr auto auto;
+    padding: 10px 14px; border-top: 1px solid rgba(42,61,26,0.4);
+    align-items: center; transition: background 0.2s;
+  }
+  .prep-row:hover { background: rgba(42,61,26,0.3); }
+  .prep-dish { font-size: 0.82rem; color: var(--text); font-weight: 500; }
+  .prep-qty { font-size: 0.82rem; color: var(--white); font-weight: 600; text-align: right; padding-right: 20px; }
+  .badge {
+    font-size: 0.68rem; font-weight: 600; padding: 3px 8px; border-radius: 5px;
+  }
+  .badge-ok { background: rgba(168,213,72,0.15); color: var(--lime); }
+  .badge-warn { background: rgba(232,160,48,0.15); color: var(--amber); }
+  .badge-low { background: rgba(42,61,26,0.5); color: var(--muted); }
+  .alert-bar {
+    background: rgba(232,160,48,0.08); border: 1px solid rgba(232,160,48,0.2);
+    border-radius: 8px; padding: 10px 14px; margin-top: 14px;
+    display: flex; align-items: center; gap: 10px; font-size: 0.78rem;
+  }
+  .alert-dot { width: 6px; height: 6px; background: var(--amber); border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .alert-text { color: var(--amber); flex: 1; }
+  .alert-action { color: var(--lime); cursor: pointer; font-weight: 600; text-decoration: underline; font-size: 0.75rem; }
+  .bar-chart { display: flex; gap: 6px; align-items: flex-end; height: 60px; margin-top: 14px; }
+  .bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .bar { width: 100%; border-radius: 4px 4px 0 0; transition: height 1s ease; }
+  .bar-label { font-size: 0.6rem; color: var(--muted); }
+  .mini-tag { font-size: 0.62rem; background: rgba(168,213,72,0.1); color: var(--lime); border: 1px solid rgba(168,213,72,0.2); padding: 2px 6px; border-radius: 4px; }
+
+  /* ===== SECTION SHARED ===== */
+  .section-pad { padding: 100px 0; }
+  .section-header { text-align: center; margin-bottom: 64px; }
+  .section-header p { max-width: 560px; margin: 16px auto 0; font-size: 1.1rem; }
+  .divider { border: none; border-top: 1px solid var(--border); margin: 0; }
+
+  /* ===== PROBLEM ===== */
+  #problem {
+    background: var(--bg2);
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  }
+  .problem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .problem-left h2 { color: var(--white); margin-bottom: 20px; }
+  .problem-left h2 em { color: var(--amber); font-style: italic; }
+  .problem-left p { margin-bottom: 16px; line-height: 1.8; }
+  .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 36px; }
+  .stat-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px;
+  }
+  .stat-num { font-family: var(--ff-head); font-size: 2rem; font-weight: 900; color: var(--amber); }
+  .stat-desc { font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
+  .pain-list { display: flex; flex-direction: column; gap: 16px; }
+  .pain-item {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px 24px;
+    display: flex; align-items: flex-start; gap: 16px;
+    transition: var(--transition);
+  }
+  .pain-item:hover { border-color: rgba(232,160,48,0.35); transform: translateX(4px); }
+  .pain-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 2px; }
+  .pain-title { font-size: 0.9rem; font-weight: 600; color: var(--white); margin-bottom: 4px; }
+  .pain-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+
+  /* ===== SOLUTION ===== */
+  #solution { padding: 100px 0; }
+  .solution-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .solution-right h2 { color: var(--white); margin-bottom: 20px; }
+  .solution-right h2 em { color: var(--lime); font-style: italic; }
+  .solution-right p { margin-bottom: 20px; line-height: 1.8; }
+  .feature-chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+  .chip {
+    font-size: 0.78rem; font-weight: 600; color: var(--text);
+    background: rgba(42,61,26,0.6); border: 1px solid var(--border);
+    padding: 7px 14px; border-radius: 100px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .chip-dot { width: 6px; height: 6px; background: var(--lime); border-radius: 50%; }
+
+  /* Inline mini-visual */
+  .flow-visual {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 28px;
+  }
+  .flow-step {
+    display: flex; align-items: flex-start; gap: 16px; margin-bottom: 20px; position: relative;
+  }
+  .flow-step:last-child { margin-bottom: 0; }
+  .flow-step::before {
+    content: ''; position: absolute;
+    left: 19px; top: 40px; bottom: -20px; width: 2px;
+    background: linear-gradient(to bottom, var(--border), transparent);
+  }
+  .flow-step:last-child::before { display: none; }
+  .flow-num {
+    width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--ff-head); font-size: 0.9rem; font-weight: 700; color: var(--lime);
+    background: var(--bg); flex-shrink: 0;
+  }
+  .flow-content h4 { font-size: 0.92rem; font-weight: 600; color: var(--white); margin-bottom: 4px; }
+  .flow-content p { font-size: 0.8rem; color: var(--muted); line-height: 1.6; margin: 0; }
+
+  /* ===== FEATURES ===== */
+  #features { background: var(--bg2); padding: 100px 0; border-top: 1px solid var(--border); }
+  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .feature-card {
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 14px; padding: 28px;
+    transition: var(--transition); position: relative; overflow: hidden;
+  }
+  .feature-card::after {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--green), transparent);
+    opacity: 0; transition: var(--transition);
+  }
+  .feature-card:hover { border-color: var(--green); transform: translateY(-4px); box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
+  .feature-card:hover::after { opacity: 1; }
+  .feat-icon {
+    width: 44px; height: 44px; background: rgba(76,124,46,0.15); border: 1px solid rgba(76,124,46,0.3);
+    border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; margin-bottom: 18px;
+  }
+  .feat-title { font-size: 1rem; font-weight: 600; color: var(--white); margin-bottom: 8px; }
+  .feat-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.7; }
+
+  /* ===== HOW IT WORKS ===== */
+  #how { padding: 100px 0; }
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; position: relative; }
+  .steps::before {
+    content: ''; position: absolute;
+    top: 24px; left: calc(12.5% + 16px); right: calc(12.5% + 16px); height: 2px;
+    background: linear-gradient(90deg, var(--border), var(--lime), var(--border));
+  }
+  .step {
+    display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 16px;
+  }
+  .step-num {
+    width: 48px; height: 48px; border-radius: 50%;
+    background: var(--bg3); border: 2px solid var(--lime);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--ff-head); font-size: 1.1rem; font-weight: 700; color: var(--lime);
+    margin-bottom: 20px; position: relative; z-index: 1;
+  }
+  .step-title { font-size: 0.95rem; font-weight: 600; color: var(--white); margin-bottom: 8px; }
+  .step-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+
+  /* ===== BENEFITS ===== */
+  #benefits { background: var(--bg2); padding: 100px 0; border-top: 1px solid var(--border); }
+  .benefits-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .benefit-item {
+    background: var(--bg3); border: 1px solid var(--border); border-radius: 14px;
+    padding: 32px; display: flex; gap: 20px; transition: var(--transition);
+  }
+  .benefit-item:hover { border-color: var(--green); transform: translateY(-2px); }
+  .benefit-icon { font-size: 1.8rem; flex-shrink: 0; }
+  .benefit-title { font-size: 1rem; font-weight: 600; color: var(--white); margin-bottom: 6px; }
+  .benefit-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.7; }
+
+  /* ===== DIFFERENTIATORS ===== */
+  #why { padding: 100px 0; }
+  .diff-table {
+    border: 1px solid var(--border); border-radius: 14px; overflow: hidden;
+    background: var(--bg3);
+  }
+  .diff-row {
+    display: grid; grid-template-columns: 2fr 1fr 1fr;
+    border-bottom: 1px solid var(--border); transition: background 0.2s;
+  }
+  .diff-row:last-child { border-bottom: none; }
+  .diff-row:hover:not(.diff-row-head) { background: rgba(42,61,26,0.3); }
+  .diff-row-head { background: rgba(22,33,14,0.8); }
+  .diff-cell {
+    padding: 16px 24px; font-size: 0.88rem; color: var(--muted);
+    display: flex; align-items: center;
+  }
+  .diff-cell:not(:last-child) { border-right: 1px solid var(--border); }
+  .diff-row-head .diff-cell { font-weight: 700; color: var(--text); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; }
+  .diff-row-head .diff-cell:nth-child(2) { color: var(--lime); }
+  .diff-row-head .diff-cell:nth-child(3) { color: var(--muted); }
+  .check { color: var(--lime); font-size: 1rem; }
+  .cross { color: #4a4a3a; font-size: 1rem; }
+
+  /* ===== SOCIAL PROOF ===== */
+  #proof { background: var(--bg2); padding: 100px 0; border-top: 1px solid var(--border); }
+  .metrics-strip {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    border: 1px solid var(--border); border-radius: 14px; overflow: hidden;
+    margin-bottom: 56px; background: var(--bg3);
+  }
+  .metric-box {
+    padding: 36px 24px; text-align: center;
+    border-right: 1px solid var(--border);
+  }
+  .metric-box:last-child { border-right: none; }
+  .metric-num { font-family: var(--ff-head); font-size: 2.6rem; font-weight: 900; color: var(--lime); }
+  .metric-label { font-size: 0.82rem; color: var(--muted); margin-top: 6px; line-height: 1.5; }
+  .testimonial-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .testimonial {
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 14px; padding: 28px; transition: var(--transition);
+  }
+  .testimonial:hover { border-color: var(--green); transform: translateY(-3px); }
+  .testimonial-quote { font-size: 0.88rem; color: var(--text); line-height: 1.75; margin-bottom: 20px; font-style: italic; }
+  .testimonial-author { display: flex; align-items: center; gap: 12px; }
+  .avatar {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: var(--green); display: flex; align-items: center; justify-content: center;
+    font-family: var(--ff-head); font-size: 0.9rem; font-weight: 700; color: #fff;
+    flex-shrink: 0;
+  }
+  .author-name { font-size: 0.85rem; font-weight: 600; color: var(--white); }
+  .author-role { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+  .pilot-note {
+    text-align: center; margin-top: 36px;
+    font-size: 0.78rem; color: var(--muted);
+    border: 1px solid var(--border); display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 20px; border-radius: 100px; margin-left: auto; margin-right: auto;
+  }
+  .pilot-note-wrap { display: flex; justify-content: center; margin-top: 36px; }
+
+  /* ===== CTA SECTION ===== */
+  #cta {
+    padding: 100px 0;
+    background: radial-gradient(ellipse 60% 70% at 50% 50%, rgba(76,124,46,0.2) 0%, transparent 70%);
+  }
+  .cta-inner { text-align: center; max-width: 640px; margin: 0 auto; }
+  .cta-inner h2 { color: var(--white); margin-bottom: 20px; }
+  .cta-inner p { font-size: 1.1rem; margin-bottom: 36px; }
+  .cta-form {
+    display: flex; gap: 12px; max-width: 480px; margin: 0 auto 20px;
+  }
+  .cta-input {
+    flex: 1; background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 14px 18px; color: var(--text);
+    font-family: var(--ff-body); font-size: 0.95rem; outline: none;
+    transition: border-color 0.2s;
+  }
+  .cta-input::placeholder { color: var(--muted); }
+  .cta-input:focus { border-color: var(--lime); }
+  .cta-note { font-size: 0.78rem; color: var(--muted); }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: var(--bg); border-top: 1px solid var(--border);
+    padding: 60px 0 32px;
+  }
+  .footer-top {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px; margin-bottom: 48px;
+  }
+  .footer-brand .logo { display: block; margin-bottom: 14px; font-size: 1.3rem; }
+  .footer-brand p { font-size: 0.85rem; color: var(--muted); line-height: 1.7; max-width: 260px; }
+  .footer-col h4 { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 16px; }
+  .footer-col a { display: block; font-size: 0.85rem; color: var(--muted); text-decoration: none; margin-bottom: 10px; transition: color 0.2s; }
+  .footer-col a:hover { color: var(--lime); }
+  .footer-bottom {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-top: 32px; border-top: 1px solid var(--border);
+    font-size: 0.8rem; color: var(--muted);
+  }
+
+  /* ===== ANIMATIONS ===== */
+  .fade-in {
+    opacity: 0; transform: translateY(24px);
+    animation: fadeUp 0.7s ease forwards;
+  }
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+  .d1 { animation-delay: 0.1s; }
+  .d2 { animation-delay: 0.2s; }
+  .d3 { animation-delay: 0.3s; }
+  .d4 { animation-delay: 0.4s; }
+  .d5 { animation-delay: 0.5s; }
+
+  /* Scroll reveal */
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 900px) {
+    .hero-inner, .problem-grid, .solution-inner { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .features-grid, .testimonial-grid { grid-template-columns: 1fr 1fr; }
+    .steps { grid-template-columns: 1fr 1fr; gap: 32px; }
+    .steps::before { display: none; }
+    .benefits-grid { grid-template-columns: 1fr; }
+    .metrics-strip { grid-template-columns: 1fr 1fr; }
+    .footer-top { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 600px) {
+    .features-grid, .testimonial-grid, .steps { grid-template-columns: 1fr; }
+    .metrics-strip { grid-template-columns: 1fr 1fr; }
+    .cta-form { flex-direction: column; }
+    .stat-row { grid-template-columns: 1fr; }
+    .diff-table { display: none; }
+    .footer-top { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="container">
+    <div class="nav-inner">
+      <a href="#" class="logo">Waste<span>Wise</span></a>
+      <ul class="nav-links">
+        <li><a href="#problem">Problem</a></li>
+        <li><a href="#solution">Solution</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#proof">Results</a></li>
+      </ul>
+      <a href="#cta" class="btn btn-primary" style="padding:10px 22px;font-size:0.88rem;">Request Demo</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="tag fade-in d1">AI-Powered Restaurant Operations</div>
+        <h1 class="hero-headline fade-in d2">
+          Stop Over&shy;prepping.<br/>Start <em>Recovering</em><br/>Lost Revenue.
+        </h1>
+        <p class="hero-sub fade-in d3">
+          WasteWise connects to your POS and tells your kitchen exactly how much to prep each morning — using AI demand forecasting, weather, and local events. Then it helps you sell what's left before it goes to waste.
+        </p>
+        <div class="hero-ctas fade-in d4">
+          <a href="#cta" class="btn btn-primary">Request Early Access →</a>
+          <a href="#how" class="btn btn-secondary">See How It Works</a>
+        </div>
+        <div class="hero-trust fade-in d5">
+          <span class="trust-item">✓ POS-integrated</span>
+          <span class="trust-dot"></span>
+          <span class="trust-item">✓ No extra hardware</span>
+          <span class="trust-dot"></span>
+          <span class="trust-item">✓ Live in under 48 hrs</span>
+        </div>
+      </div>
+
+      <div class="hero-right fade-in d3">
+        <div class="dashboard">
+          <div class="dash-header">
+            <span class="dash-title">Prep Recommendations</span>
+            <span class="dash-date">Today · Friday</span>
+          </div>
+          <div class="dash-grid">
+            <div class="dash-card">
+              <div class="dash-metric">₹4,200</div>
+              <div class="dash-metric-label">Waste recovered this week</div>
+              <div class="dash-metric-change">↑ 18% vs last week</div>
+            </div>
+            <div class="dash-card">
+              <div class="dash-metric">31%</div>
+              <div class="dash-metric-label">Food waste reduction</div>
+              <div class="dash-metric-change">↑ vs pre-WasteWise baseline</div>
+            </div>
+          </div>
+          <div class="prep-list">
+            <div class="prep-list-header">
+              <span>Dish</span>
+              <span>Prep Qty</span>
+              <span>Status</span>
+            </div>
+            <div class="prep-row">
+              <span class="prep-dish">Butter Chicken</span>
+              <span class="prep-qty">24 portions</span>
+              <span class="badge badge-ok">On-track</span>
+            </div>
+            <div class="prep-row">
+              <span class="prep-dish">Paneer Tikka</span>
+              <span class="prep-qty">16 portions</span>
+              <span class="badge badge-warn">⚠ Near-expiry</span>
+            </div>
+            <div class="prep-row">
+              <span class="prep-dish">Dal Makhani</span>
+              <span class="prep-qty">30 portions</span>
+              <span class="badge badge-ok">On-track</span>
+            </div>
+            <div class="prep-row">
+              <span class="prep-dish">Veg Biryani</span>
+              <span class="prep-qty">18 portions</span>
+              <span class="badge badge-low">Reduce by 4</span>
+            </div>
+          </div>
+          <div class="alert-bar">
+            <div class="alert-dot"></div>
+            <span class="alert-text">8 Paneer Tikka portions expiring in 3 hrs</span>
+            <span class="alert-action">Discount & Publish →</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;">
+            <span style="font-size:0.72rem;color:var(--muted)">Weekly waste trend</span>
+            <span class="mini-tag">AI-forecast ✓</span>
+          </div>
+          <div class="bar-chart">
+            <div class="bar-wrap"><div class="bar" style="height:52px;background:rgba(168,213,72,0.25)"></div><span class="bar-label">Mon</span></div>
+            <div class="bar-wrap"><div class="bar" style="height:44px;background:rgba(168,213,72,0.25)"></div><span class="bar-label">Tue</span></div>
+            <div class="bar-wrap"><div class="bar" style="height:58px;background:rgba(232,160,48,0.3)"></div><span class="bar-label">Wed</span></div>
+            <div class="bar-wrap"><div class="bar" style="height:38px;background:rgba(168,213,72,0.25)"></div><span class="bar-label">Thu</span></div>
+            <div class="bar-wrap"><div class="bar" style="height:24px;background:rgba(168,213,72,0.5)"></div><span class="bar-label">Fri</span></div>
+            <div class="bar-wrap"><div class="bar" style="height:18px;background:rgba(168,213,72,0.6)"></div><span class="bar-label">Sat</span></div>
+            <div class="bar-wrap"><div class="bar" style="height:15px;background:rgba(168,213,72,0.7)"></div><span class="bar-label">Sun</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section id="problem" class="section-pad">
+  <div class="container">
+    <div class="problem-grid">
+      <div class="problem-left reveal">
+        <div class="tag">The Problem</div>
+        <h2>Restaurants run on <em>guesswork.</em><br/>The margins pay the price.</h2>
+        <p>Every morning, your kitchen manager estimates how much to prep. They look at yesterday's numbers, factor in nothing about the weather or a nearby cricket match, and then cook accordingly.</p>
+        <p>The result? Overproduction on slow days. Shortfalls on busy ones. Produce spoils, margin bleeds, and no one has hard data to make it better tomorrow.</p>
+        <p>For multi-outlet operations, this problem compounds at every location — silently eroding profitability with no visibility into where the waste is coming from.</p>
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="stat-num">30%</div>
+            <div class="stat-desc">of food prepared in restaurants is wasted before it reaches a customer</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num">₹80K</div>
+            <div class="stat-desc">estimated monthly loss for a mid-size restaurant due to overproduction</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num">0%</div>
+            <div class="stat-desc">of prep decisions today are driven by real-time demand data</div>
+          </div>
+        </div>
+      </div>
+      <div class="pain-list reveal">
+        <div class="pain-item">
+          <div class="pain-icon">📋</div>
+          <div>
+            <div class="pain-title">Manual Prep Planning Is Guesswork</div>
+            <div class="pain-desc">Kitchen managers rely on intuition and yesterday's sales — missing spikes from events, holidays, and weather shifts entirely.</div>
+          </div>
+        </div>
+        <div class="pain-item">
+          <div class="pain-icon">🗑️</div>
+          <div>
+            <div class="pain-title">Overproduction Silently Drains Revenue</div>
+            <div class="pain-desc">Food cooked but not sold isn't just a waste cost — it's a direct hit to your ingredient budget, labour hours, and daily margins.</div>
+          </div>
+        </div>
+        <div class="pain-item">
+          <div class="pain-icon">⏰</div>
+          <div>
+            <div class="pain-title">Spoilage Alerts Come Too Late</div>
+            <div class="pain-desc">By the time you notice excess stock, the window to sell, discount, or reallocate it has already passed.</div>
+          </div>
+        </div>
+        <div class="pain-item">
+          <div class="pain-icon">📊</div>
+          <div>
+            <div class="pain-title">No Visibility Across Outlets</div>
+            <div class="pain-desc">Multi-outlet operations can't see where waste is concentrated, which dishes are consistently overproduced, or which days need tighter prep targets.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTION -->
+<section id="solution" class="section-pad">
+  <div class="container">
+    <div class="solution-inner">
+      <div class="flow-visual reveal">
+        <div class="flow-step">
+          <div class="flow-num">1</div>
+          <div class="flow-content">
+            <h4>Connect your POS</h4>
+            <p>WasteWise integrates with your existing POS in under 48 hours. No new hardware, no IT overhead — just a clean, one-time setup.</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">2</div>
+          <div class="flow-content">
+            <h4>AI learns your demand patterns</h4>
+            <p>Our model analyses your historical sales, layered with weather, local events, and day-of-week signals to build outlet-specific forecasts.</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">3</div>
+          <div class="flow-content">
+            <h4>Your kitchen gets daily prep targets</h4>
+            <p>Every morning, your team opens WasteWise and sees exactly how much of each dish to prep — with confidence scores and reasoning.</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">4</div>
+          <div class="flow-content">
+            <h4>Near-expiry food gets recovered</h4>
+            <p>When surplus builds up, WasteWise triggers spoilage alerts with one-tap discounting — so you sell it before it goes to waste.</p>
+          </div>
+        </div>
+      </div>
+      <div class="solution-right reveal">
+        <div class="tag">The Solution</div>
+        <h2>Precision prep planning, <em>powered by AI.</em></h2>
+        <p>WasteWise replaces guesswork with data-driven prep recommendations tailored to your menu, your outlet, and today's demand signals — every single day.</p>
+        <p>It's not a generic inventory tool. It's a daily operations layer that sits between your POS data and your kitchen team, turning raw transaction history into actionable prep targets and real-time spoilage recovery.</p>
+        <p>The result: less food cooked unnecessarily, less food thrown away, and a new revenue stream from near-expiry discounting you were previously leaving on the table.</p>
+        <div class="feature-chips">
+          <span class="chip"><span class="chip-dot"></span>AI Prep Engine</span>
+          <span class="chip"><span class="chip-dot"></span>Demand Forecasting</span>
+          <span class="chip"><span class="chip-dot"></span>Spoilage Alerts</span>
+          <span class="chip"><span class="chip-dot"></span>Surplus Recovery</span>
+          <span class="chip"><span class="chip-dot"></span>Waste Analytics</span>
+          <span class="chip"><span class="chip-dot"></span>POS Integration</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="tag">Features</div>
+      <h2 style="color:var(--white)">Everything your kitchen needs.<br/>Nothing it doesn't.</h2>
+      <p>Built for the realities of restaurant operations — fast, practical, and designed to be used every single morning.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feat-icon">🧠</div>
+        <div class="feat-title">AI Prep Recommendations</div>
+        <div class="feat-desc">Dish-level prep targets generated fresh every morning. Based on your actual sales history — not industry averages or generic templates.</div>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feat-icon">📈</div>
+        <div class="feat-title">Demand Forecasting</div>
+        <div class="feat-desc">Our model cross-references weather, local events, holidays, and day-of-week patterns to call demand spikes and quiet days before they happen.</div>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feat-icon">🔔</div>
+        <div class="feat-title">Spoilage-Risk Alerts</div>
+        <div class="feat-desc">Get notified when specific items are at risk of expiry — with time remaining, quantity at risk, and a suggested discount to clear them fast.</div>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feat-icon">💸</div>
+        <div class="feat-title">Discounted Surplus Recovery</div>
+        <div class="feat-desc">One-tap publishing of near-expiry items at a smart discount — through your delivery platforms, WhatsApp, or in-store — before they're written off.</div>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feat-icon">📊</div>
+        <div class="feat-title">Waste & Margin Analytics</div>
+        <div class="feat-desc">Track waste reduction by dish, day, and outlet. See exactly how much you've saved each week and which prep decisions are still costing you.</div>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feat-icon">🔗</div>
+        <div class="feat-title">POS Integration</div>
+        <div class="feat-desc">Connects with leading POS systems used across India and MENA. No manual data entry, no spreadsheets. Your sales data flows in automatically.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how" class="section-pad">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="tag">How It Works</div>
+      <h2 style="color:var(--white)">From POS data to prep plan<br/>in four simple steps.</h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-num">1</div>
+        <div class="step-title">Connect Your POS</div>
+        <div class="step-desc">One-time integration with your existing POS. We pull your sales history and menu data automatically — no manual uploads.</div>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">2</div>
+        <div class="step-title">AI Builds Your Forecast</div>
+        <div class="step-desc">WasteWise analyses patterns across your data alongside weather, events, and demand signals to generate outlet-specific prep targets.</div>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">3</div>
+        <div class="step-title">Kitchen Gets Daily Targets</div>
+        <div class="step-desc">Every morning, your team opens a clean, actionable prep dashboard — with dish quantities, confidence levels, and key context.</div>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">4</div>
+        <div class="step-title">Recover Surplus Revenue</div>
+        <div class="step-desc">Near-expiry alerts fire automatically. Publish discounts with one tap and recover revenue from food that would otherwise be binned.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section id="benefits">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="tag">Benefits</div>
+      <h2 style="color:var(--white)">The operational edge that<br/>compounds every day.</h2>
+      <p>WasteWise delivers measurable impact across your cost structure, daily operations, and sustainability footprint.</p>
+    </div>
+    <div class="benefits-grid">
+      <div class="benefit-item reveal">
+        <div class="benefit-icon">💰</div>
+        <div>
+          <div class="benefit-title">Recover 20–35% of Food Cost Waste</div>
+          <div class="benefit-desc">By right-sizing prep from day one, restaurants on WasteWise consistently reduce the cost of wasted food — turning a silent overhead into visible savings.</div>
+        </div>
+      </div>
+      <div class="benefit-item reveal">
+        <div class="benefit-icon">📉</div>
+        <div>
+          <div class="benefit-title">Lower Ingredient Spend Per Cover</div>
+          <div class="benefit-desc">Cooking less of what won't sell means your ingredient budget stretches further. Margins improve without raising prices or cutting quality.</div>
+        </div>
+      </div>
+      <div class="benefit-item reveal">
+        <div class="benefit-icon">⚡</div>
+        <div>
+          <div class="benefit-title">Faster, Smarter Morning Operations</div>
+          <div class="benefit-desc">Your kitchen team starts each day with a clear prep plan — reducing decision fatigue, prep-time disputes, and the chaos of mid-service shortfalls.</div>
+        </div>
+      </div>
+      <div class="benefit-item reveal">
+        <div class="benefit-icon">🌿</div>
+        <div>
+          <div class="benefit-title">Real Sustainability Metrics</div>
+          <div class="benefit-desc">Track kilograms of food saved, CO₂ equivalent reduced, and waste diversion rates — data that matters for your reporting, brand, and ESG commitments.</div>
+        </div>
+      </div>
+      <div class="benefit-item reveal">
+        <div class="benefit-icon">🏪</div>
+        <div>
+          <div class="benefit-title">Scale Across Every Outlet</div>
+          <div class="benefit-desc">Multi-location operators get a unified view of prep performance, waste trends, and recovery across all outlets — with the ability to benchmark and intervene.</div>
+        </div>
+      </div>
+      <div class="benefit-item reveal">
+        <div class="benefit-icon">🔄</div>
+        <div>
+          <div class="benefit-title">New Revenue from Near-Expiry Stock</div>
+          <div class="benefit-desc">Instead of writing off surplus, WasteWise helps you publish smart discounts and sell it. Revenue you were previously throwing in the bin.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY WASTEWISE -->
+<section id="why" class="section-pad">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="tag">Why WasteWise</div>
+      <h2 style="color:var(--white)">Not another inventory dashboard.<br/>An operating system for your kitchen.</h2>
+      <p>Most tools tell you what happened. WasteWise tells you what to do — before the food is cooked.</p>
+    </div>
+    <div class="diff-table reveal">
+      <div class="diff-row diff-row-head">
+        <div class="diff-cell">Capability</div>
+        <div class="diff-cell">WasteWise</div>
+        <div class="diff-cell">Generic Inventory / Dashboards</div>
+      </div>
+      <div class="diff-row">
+        <div class="diff-cell">Daily AI prep quantity recommendations</div>
+        <div class="diff-cell"><span class="check">✓</span></div>
+        <div class="diff-cell"><span class="cross">✗</span></div>
+      </div>
+      <div class="diff-row">
+        <div class="diff-cell">Demand forecasting using weather + events</div>
+        <div class="diff-cell"><span class="check">✓</span></div>
+        <div class="diff-cell"><span class="cross">✗</span></div>
+      </div>
+      <div class="diff-row">
+        <div class="diff-cell">Real-time spoilage risk alerts</div>
+        <div class="diff-cell"><span class="check">✓</span></div>
+        <div class="diff-cell"><span class="cross">✗</span></div>
+      </div>
+      <div class="diff-row">
+        <div class="diff-cell">One-tap discounted surplus selling</div>
+        <div class="diff-cell"><span class="check">✓</span></div>
+        <div class="diff-cell"><span class="cross">✗</span></div>
+      </div>
+      <div class="diff-row">
+        <div class="diff-cell">Waste reduction analytics by dish + outlet</div>
+        <div class="diff-cell"><span class="check">✓</span></div>
+        <div class="diff-cell">Partial</div>
+      </div>
+      <div class="diff-row">
+        <div class="diff-cell">POS integration, live in &lt;48 hours</div>
+        <div class="diff-cell"><span class="check">✓</span></div>
+        <div class="diff-cell">Varies</div>
+      </div>
+      <div class="diff-row">
+        <div class="diff-cell">Learns and improves with each day of use</div>
+        <div class="diff-cell"><span class="check">✓</span></div>
+        <div class="diff-cell"><span class="cross">✗</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL PROOF -->
+<section id="proof">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="tag">Early Traction</div>
+      <h2 style="color:var(--white)">Pilot results that speak<br/>for themselves.</h2>
+      <p>Early restaurants and cloud kitchens in our pilot programme are already seeing material impact on food cost and daily operations.</p>
+    </div>
+    <div class="metrics-strip reveal">
+      <div class="metric-box">
+        <div class="metric-num">31%</div>
+        <div class="metric-label">Average reduction in<br/>food waste across pilots</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-num">₹72K</div>
+        <div class="metric-label">Monthly savings per outlet<br/>from reduced overproduction</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-num">89%</div>
+        <div class="metric-label">Daily prep recommendation<br/>accuracy rate</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-num">48 hrs</div>
+        <div class="metric-label">Average time to POS<br/>integration and go-live</div>
+      </div>
+    </div>
+    <div class="testimonial-grid">
+      <div class="testimonial reveal">
+        <div class="testimonial-quote">"We were discarding nearly 18% of our daily prep. After two weeks on WasteWise, that number dropped below 7%. The prep recommendations are surprisingly accurate, even for weekends."</div>
+        <div class="testimonial-author">
+          <div class="avatar">R</div>
+          <div>
+            <div class="author-name">Ravi M.</div>
+            <div class="author-role">Head of Operations · Cloud Kitchen Group (Pilot)</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial reveal">
+        <div class="testimonial-quote">"The spoilage alerts are the feature I didn't know I needed. We recovered almost ₹28,000 in a single month just from discounting near-expiry items we'd have otherwise binned."</div>
+        <div class="testimonial-author">
+          <div class="avatar">S</div>
+          <div>
+            <div class="author-name">Sonali T.</div>
+            <div class="author-role">Owner · Multi-outlet QSR (Pilot)</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial reveal">
+        <div class="testimonial-quote">"Our kitchen manager used to spend 45 minutes every morning figuring out prep. Now it takes five. The team trusts the numbers because they can see the reasoning behind each recommendation."</div>
+        <div class="testimonial-author">
+          <div class="avatar">A</div>
+          <div>
+            <div class="author-name">Aarav K.</div>
+            <div class="author-role">Ops Manager · Casual Dining Chain (Pilot)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pilot-note-wrap">
+      <div class="pilot-note">
+        ℹ️ Figures represent outcomes from our closed pilot programme. Individual results will vary based on outlet size, cuisine type, and POS data quality.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="container">
+    <div class="cta-inner reveal">
+      <div class="tag">Get Started</div>
+      <h2>Your food cost is leaking.<br/>Let's plug it together.</h2>
+      <p>Join the waitlist for early access or book a 20-minute live demo. We'll show you exactly what WasteWise would look like for your kitchen.</p>
+      <div class="cta-form">
+        <input type="email" class="cta-input" placeholder="your@restaurant.com" />
+        <a href="#" class="btn btn-amber">Request Access →</a>
+      </div>
+      <p class="cta-note">No commitment required. We'll reach out within 1 business day.</p>
+      <div style="margin-top:28px;display:flex;justify-content:center;gap:32px;flex-wrap:wrap;">
+        <a href="#" class="btn btn-secondary" style="font-size:0.88rem;">Book a Live Demo</a>
+        <a href="#" class="btn btn-secondary" style="font-size:0.88rem;">Talk to the Team</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="#" class="logo">Waste<span>Wise</span></a>
+        <p>AI-powered prep planning and waste recovery for restaurants, cloud kitchens, and multi-outlet food businesses.</p>
+        <div style="margin-top:20px;display:flex;gap:10px;">
+          <a href="#cta" class="btn btn-primary" style="padding:10px 20px;font-size:0.85rem;">Request Early Access</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="#solution">How It Works</a>
+        <a href="#features">Features</a>
+        <a href="#why">Why WasteWise</a>
+        <a href="#proof">Results</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="#">About</a>
+        <a href="#">Blog</a>
+        <a href="#">Careers</a>
+        <a href="#">Press</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <a href="mailto:hello@wastewise.ai">hello@wastewise.ai</a>
+        <a href="#">Book a Demo</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">Privacy Policy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2024 WasteWise. All rights reserved.</span>
+      <span style="color:var(--muted);font-style:italic;font-family:var(--ff-head)">Less waste. Better margins. Every day.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 60);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Nav scroll effect
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    nav.style.padding = window.scrollY > 60 ? '14px 0' : '20px 0';
+  });
+</script>
+</body>
+</html>
